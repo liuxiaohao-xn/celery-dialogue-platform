@@ -3,15 +3,15 @@ celery-dialogue-platform是一个任务型多轮对话平台，适用于人机�
 
 ## 特性
 1. 平台架构遵循NLU(意图识别、槽位提取)->DM(DST、DP、Action)->NLG的pipeline模式；
-2. DST本质用的FSM算法，各个对话状态之间通过意图进行激活和跳转；
-3. 业务对话流程可在./resource/*.yaml中动态配置开发；
-4. 各个组件用到的模型均可根据业务动态配置，如nlu可用规则模型、分类模型、或者大模型等；
-5. 对话提供grpc接口，可快速和业务端进行集成。
+2. DST本质用的FSM算法，各个对话状态之间通过意图或条件进行激活和跳转；
+3. 业务对话流程基于yaml文件格式动态配置开发；
+4. 组件之间高度解耦，各个组件用到的模型均可根据业务动态配置，如nlu可用规则模型、分类模型、或者LLM等；
+5. 提供grpc api，可快速和业务端进行集成。
 
 
 ## 快速开发
 
-下面以如何快速开发包含 预定会议、倒水、打电话 3个技能场景的对话系统
+下面以如何快速开发包含如 预定会议、倒水、打电话 3个技能场景的对话系统
 
 ### 对话配置(./resource)
 
@@ -29,15 +29,43 @@ celery-dialogue-platform是一个任务型多轮对话平台，适用于人机�
 
 ### 模型配置(./src/common/component/component.py)
 
-不同的业务场景可能会用到不同的模型，同一个业务场景也可能会进行模型的升级，而算法任务开发的模型各异，为了进行快速集成和迭代，我们统一模型集成到平台的实现方式。
+不同的业务场景可能会用到不同的模型，同一个业务场景也可能会进行模型的迭代和升级，而算法人员开发的模型各异，为了进行快速集成和迭代，我们统一模型集成到平台的实现方式。
 
 1. 为了统一不同组件相同处理流程，算法人员需要实现Component接口中的三个方法；
 
-2. 为了统一不同模型的输入输出，方便平台统一处理，如槽位提取模型算法、还需要实现./src/nlu/extractors/exactor/Extractor.build_res来获取模型结果。
+2. 为了统一不同模型的输入输出，方便平台统一处理，如槽位提取模型算法、还需要实现平台定义好的./src/nlu/extractors/exactor/Extractor.build_res方法来获取模型结果。
 
 ### Action配置(.src/dm/action.py)
 
 action主要用于用户对平台结果进行二次决策，包括意图、槽位实体的校验和修改、rsp的选择、外部接口的调用等。
+
+用户可以根据自己的业务流程来动态定义自己的action。
+
+### 启动
+
+直接启动
+```shell
+python3 grpc_server.py 
+```
+or
+
+部署成docker镜像，下面是对应的Dockerfile文件配置
+```shell
+# vim Dockerfile
+FROM hub.infore-robotics.cn/service-robotics/yh-robot-nlp-base:1.0.0
+WORKDIR /app
+
+COPY resource /app/resource
+COPY src /app/src
+COPY lib/libgomp.so.1 /usr/lib/x86_64-linux-gnu/libgomp.so.1
+COPY lib/libgomp.so.1.0.0 /usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0
+COPY grpc_client.py /app/grpc_client.py
+COPY grpc_server.py /app/grpc_server.py
+COPY app.py /app/app.py
+
+ENTRYPOINT ["/usr/local/python39/bin/python3.9","grpc_server.py"]
+```
+
 
 ### 运行效果日志
 
