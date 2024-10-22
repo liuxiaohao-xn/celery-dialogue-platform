@@ -1,0 +1,57 @@
+variables:
+  # 默认使用项目名作为镜像名称、K8S的部署名称及容器名称
+  # KUBE_CONFIG、DOCKER_REPO_HOST、DOCKER_USER、DOCKER_PASS为Gitlab配置的全局变量
+  DOCKER_IMAGE_REPO_NAME: ${DOCKER_REPO_HOST}/service-robotics/${CI_PROJECT_NAME}
+  #IMAGE_TAG: $(git describe --tags --long) 不配置，用Job生成
+  APP_K8S_NAMESPACE: service-robotics
+  APP_K8S_DEPLOYMENT: ${CI_PROJECT_NAME}
+  APP_K8S_CONTAINER: ${CI_PROJECT_NAME}
+
+# CICD步骤流程
+stages:
+  - docker_ship
+  - k8s_deploy
+
+before_script:
+  - echo "Before script section"
+
+after_script:
+  - echo "After script section"
+
+# 自动交付镜像到Harbor仓库，使用docker-git镜像
+docker_delivery:
+  image:
+    name: ${DOCKER_REPO_HOST}/public/docker:latest
+    entrypoint: ["/bin/sh", "-c cat"]
+  stage: docker_ship
+  tags:
+    - kubernetes
+  script:
+    # 生成镜像Tag格式、写入当前Git版本信息到镜像构建标签以方便追踪
+    - export SCM_ID=$(test ${CI_COMMIT_TAG} && echo ${CI_COMMIT_TAG} || git describe --tags --long)
+    - export DOCKER_IMAGE=${DOCKER_IMAGE_REPO_NAME}:${SCM_ID}
+    - echo "DOCKER_IMAGE=${DOCKER_IMAGE}" >> imageInfo.env
+    - sed -i "3a LABEL gitVersion=${CI_COMMIT_SHORT_SHA}\nLABEL gitBranch=${CI_COMMIT_REF_NAME}\n" Dockerfile
+    - echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin ${DOCKER_IMAGE_REPO_NAME}
+    - echo ${DOCKER_IMAGE}
+    - docker build -t ${DOCKER_IMAGE} .
+    - docker push ${DOCKER_IMAGE}
+  artifacts:
+    reports:
+      # 保存变量供后续步骤使用：DOCKER_IMAGE
+      dotenv: imageInfo.env
+
+# 部署更新K8S项目
+k8s_deployment:
+  image:
+    name: ${DOCKER_REPO_HOST}/public/k8s:latest
+    entrypoint: ["/bin/sh", "-c cat"]
+  stage: k8s_deploy
+  tags:
+    - kubernetes
+  script:
+    - echo registry ${DOCKER_IMAGE}
+    - mkdir $HOME/.kube && cat $KUBE_CONFIG > $HOME/.kube/config
+    - kubectl -n ${APP_K8S_NAMESPACE} set image deployment/${APP_K8S_DEPLOYMENT} ${APP_K8S_CONTAINER}=${DOCKER_IMAGE}
+  dependencies:
+    - docker_delivery

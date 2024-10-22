@@ -1,0 +1,40 @@
+sec_skill:
+  meeting:
+    zh: "会议"
+    intents:
+      - "hold_meeting"
+      - "modify_meeting_time"
+      - "cancel_meeting"
+    pipeline:
+      - "MeetingIntentRecognize"
+      - "EntityNameTime"
+      - "BasePolicy"
+  water:
+    zh: "取水"
+    intents:
+      - "get_water"
+      - "service_water"
+    pipeline:
+      - "TakeWaterIntentRecognize"
+      - "ZhNumExtractor"
+      - "BasePolicy"
+  call:
+    zh: "呼叫"
+    intents:
+      - "make_call"
+    pipeline:
+      - "CallIntentRecognize"
+      - "EntityNameTime"
+      - "BasePolicy"
+  system:
+    zh: "系统"
+    intents:
+      - "positive"
+      - "negative"
+      - "cancel"
+      - "select"
+      - "select_date"
+    pipeline:
+      - "SystemIntentRecognize"
+      - "ZhNumExtractor"
+      - "BasePolicy"

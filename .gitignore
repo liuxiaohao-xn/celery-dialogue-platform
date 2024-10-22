@@ -1,0 +1,8 @@
+/log
+/test
+/.idea
+**/__pycache__
+install.sh
+*.log
+/lib
+Dockerfile

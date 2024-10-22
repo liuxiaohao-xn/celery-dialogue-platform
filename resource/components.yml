@@ -1,0 +1,42 @@
+# 考虑到解析时的复杂度，暂只支持二级列表，且注册的组件名(类名)不能重复
+classifiers:
+  - src.nlu.classifiers.skill_classifier.SECSkillClassifier
+  - src.nlu.classifiers.intent_classifier.RuleClassifier
+  - src.nlu.classifiers.sqz.sqz_rule.SkillRecognize
+  - src.nlu.classifiers.sqz.sqz_rule.MeetingIntentRecognize
+  - src.nlu.classifiers.sqz.sqz_rule.TakeWaterIntentRecognize
+  - src.nlu.classifiers.sqz.sqz_rule.CallIntentRecognize
+  - src.nlu.classifiers.sqz.sqz_rule.SystemIntentRecognize
+featurizers:
+
+extractors:
+  - src.nlu.extractors.extractor.Extractor
+  - src.nlu.extractors.sqz.sqz_ext.EntityNameTime
+  - src.nlu.extractors.sqz.sqz_ext.ZhNumExtractor
+
+tokenizers:
+
+policies:
+  - src.dm.policy.BasePolicy
+
+actions:
+  - src.dm.actions.action.SuccessAction
+  - src.dm.actions.sec_action.MeetingSuccessAction
+  - src.dm.actions.sec_action.MakeCallSuccessAction
+  - src.dm.actions.sec_action.TakeWaterAction
+  - src.dm.actions.action.CancelAction
+  - src.dm.actions.action.SlotAction
+  - src.dm.actions.action.SlotMissingAction
+  - src.dm.actions.sec_action.AttendeeSlotMissingAction
+  - src.dm.actions.sec_action.MeetingTimeSlotMissingAction
+  - src.dm.actions.action.EntityAction
+  - src.dm.actions.action.EntityErrorAction
+  - src.dm.actions.sec_action.MeetingTimeErrorAction
+  - src.dm.actions.sec_action.AttendeeErrorAction
+  - src.dm.actions.sec_action.CalleeErrorAction
+  - src.dm.actions.action.EntityRepeatAction
+  - src.dm.actions.sec_action.AttendeeRepeatAction
+  - src.dm.actions.sec_action.CalleeRepeatAction
+  - src.dm.actions.action.EntityFollowUpAction
+  - src.dm.actions.sec_action.AttendeeFollowUpAction
+

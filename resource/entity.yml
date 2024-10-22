@@ -1,0 +1,20 @@
+peo:
+  zh: "人"
+  des: "dynamic source, 不同的业务or意图, 源可能不同"
+  csl: "dynamic"
+  verify_fn: "staff_verify"
+dep:
+  zh: "部门"
+  des: "dynamic source, 不同的业务or意图, 源可能不同"
+  csl: "dynamic"
+  verify_fn: ""
+number:
+  zh: "数字"
+  des: ""
+  csl: "static"
+  verify_fn: ""
+time:
+  zh: "时间"
+  des: ""
+  csl: "static"
+  verify_fn: "time_verify"

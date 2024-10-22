@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package nlp;
+
+option go_package = "./;nlp";
+
+
+service NlpService {
+  rpc Skill(NlpSkillReq) returns (NlpSkillResp){}
+}
+
+message NlpReqContent {
+    string asr_text= 1;
+}
+
+message NlpDeviceInfo {
+    string device_sn = 1;
+    string merchant_id = 2;
+}
+
+message NlpInteractInfo {
+    string interact_id = 1;
+}
+
+message NlpSkillInfo {
+    string code = 1;
+}
+
+message NlpSkillReq {
+    NlpReqContent content = 1;
+    NlpDeviceInfo device_info = 2;
+    NlpInteractInfo interact_info = 3;
+    repeated NlpSkillInfo skill_list = 4;
+}
+
+message NlpSlot {
+    string slot = 1;
+    string norma_value = 2;
+    string value = 3;
+    bool optional = 4;
+    string extra = 5;
+}
+
+message NlpRespContent {
+    string asr_text = 1;
+    string tts_text = 2;
+    string skill_id = 3;
+    string intent_id = 4;
+    bool session_end = 5;
+    bool confirm = 6;
+    bool ask_aiui = 7;
+    repeated NlpSlot slots = 8;
+}
+
+message NlpSkillResp {
+  int32 code = 1;// 0成功
+  string msg = 2;
+  NlpRespContent content = 3;
+  NlpDeviceInfo device_info = 4;
+  NlpInteractInfo interact_info = 5;
+}

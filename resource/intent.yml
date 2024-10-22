@@ -1,0 +1,138 @@
+hold_meeting:
+  zh: "召开会议"
+  des: "用户发起召开会议意图，必需槽位【与会人】 和 【会议时间】"
+  slots:
+    attendee:
+      id: 2
+      zh: "参会人"
+      required: true
+      multi: true
+      polymorphism:
+        - "peo"
+#        - "dep"
+      flows:
+        slot_missing_flow:
+          action: "SlotMissingAction"
+          response:
+            - "收到，需要邀请哪些人员参会呢？"
+            - "收到，通知哪些人员参会呢？"
+        entity_verify_flow:
+          action: "AttendeeErrorAction"
+          response:
+            - ""
+        entity_repeat_flow:
+          action: "AttendeeRepeatAction"
+          response:
+            - ""
+        entity_follow_up_flow:
+          action: "AttendeeFollowUpAction"
+          response:
+            - "收到，请问还有其他参会人员吗？"
+    meeting_time:
+      id: 1
+      zh: "会议时间"
+      required: true
+      multi: false
+      polymorphism:
+        - "time"
+      flows:
+        slot_missing_flow:
+          action: "MeetingTimeSlotMissingAction"
+          response:
+            - "好的，需要定几点的会议呢？"
+            - "好的，会议定在几点呢?"
+        entity_verify_flow:
+          action: "MeetingTimeErrorAction"
+          response:
+            - "会议时间错误, 请重新说下会议时间! "
+            - "会议时间错误, 请重说下会议时间! "
+#        meeting_time_verify_flow:
+#          action: "MeetingTimeErrorAction"
+#          response:
+#            - "会议时间错误, 请重新说下会议时间! "
+#            - "会议时间错误, 请重说下会议时间! "
+  cancel_flow:
+    action: "CancelAction"
+    response:
+      - "好的, 已为您取消会议"
+      - "好的，会议已取消"
+  success_flow:
+    action: "MeetingSuccessAction"
+    response:
+      - "好的，会议已确认，记得准时参加哟！"
+
+#cancel_meeting:
+#  zh: "取消会议"
+#  success_flow:
+#    action: "SuccessAction"
+#    response:
+#      - "取消会议成功"
+
+get_water:
+  zh: "取水"
+  des: "取水"
+  slots:
+    nums:
+      id: 0
+      zh: "水数量"
+      required: false
+      multi: false
+      polymorphism:
+        - "number"
+    water_drinker:
+      id: 0
+      zh: "喝水人"
+      required: false
+      multi: false
+      polymorphism:
+        - "peo"
+  success_flow:
+    action: "TakeWaterAction"
+    response:
+      - "好的，这就帮您去取水"
+      - "好嘞，请稍后"
+      - "收到，请稍等"
+      - "好的，请稍等"
+#service_water:
+#  zh: "水送达"
+#  des: "后台发起意图"
+#  finish:
+#    action: "SuccessAction"
+#    response:
+#      - "送水成功"
+#
+make_call:
+  zh: "发起呼叫"
+  des: ""
+  slots:
+    callee:
+      id: 1
+      zh: "被呼叫人"
+      required: true
+      multi: false
+      polymorphism:
+        - "peo"
+      flows:
+        slot_missing_flow:
+          action: "SlotMissingAction"
+          response:
+            - "您要呼叫给谁呢？"
+            - "你要打给哪位呢？"
+        entity_verify_flow:
+          action: "CalleeErrorAction"
+          response:
+            - ""
+        entity_repeat_flow:
+          action: "CalleeRepeatAction"
+          response:
+            - ""
+  cancel_flow:
+    action: "CancelAction"
+    response:
+      - "好的, 已取消呼叫"
+      - "好的，已为您取消"
+  success_flow:
+    action: "MakeCallSuccessAction"
+    response:
+      - "好的, 正在为您呼叫"
+      - "请稍等, 您的通话正在接通中"
