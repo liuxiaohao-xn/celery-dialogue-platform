@@ -13,7 +13,7 @@ celery-dialogue-platform是一个任务型多轮对话平台，适用于人机�
 
 下面以如何快速开发包含如 预定会议、倒水、打电话 3个技能场景的对话系统
 
-### 对话配置(./resource)
+### [对话配置](./resource)
 
 1. 技能配置(domain.yaml)
 
@@ -27,7 +27,7 @@ celery-dialogue-platform是一个任务型多轮对话平台，适用于人机�
 
 配置动、静态实体、实体源检验等。
 
-### 模型配置(./src/common/component/component.py)
+### [模型配置](./src/common/component/component.py)
 
 不同的业务场景可能会用到不同的模型，同一个业务场景也可能会进行模型的迭代和升级，而算法人员开发的模型各异，为了进行快速集成和迭代，我们统一模型集成到平台的实现方式。
 
@@ -35,7 +35,7 @@ celery-dialogue-platform是一个任务型多轮对话平台，适用于人机�
 
 2. 为了统一不同模型的输入输出，方便平台统一处理，如槽位提取模型算法、还需要实现平台定义好的./src/nlu/extractors/exactor/Extractor.build_res方法来获取模型结果。
 
-### Action配置(.src/dm/action.py)
+### [Action配置](.src/dm/action.py)
 
 action主要用于用户对平台结果进行二次决策，包括意图、槽位实体的校验和修改、rsp的选择、外部接口的调用等。
 
