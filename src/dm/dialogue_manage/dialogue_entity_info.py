@@ -140,7 +140,6 @@ class DialogueStateEntityInfo:
         self.pending_verified_entity_info: PendingVerifiedEntityInfo = None
         self.repeat_verified_entity_info: RepeatVerifiedEntityInfo = None
         self.slot_follow_up_entity_info: SlotFollowUpEntityInfo = None
-
         self.verified_entities: Dict[Text, List[Entity]] = {}
 
     def get_last_exd_entities(self) -> List[Entity]:

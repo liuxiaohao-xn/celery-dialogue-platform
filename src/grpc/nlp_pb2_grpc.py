@@ -18,12 +18,23 @@ class NlpServiceStub(object):
                 request_serializer=nlp__pb2.NlpSkillReq.SerializeToString,
                 response_deserializer=nlp__pb2.NlpSkillResp.FromString,
                 )
+        self.Emotion = channel.unary_unary(
+                '/nlp.NlpService/Emotion',
+                request_serializer=nlp__pb2.EmotionReq.SerializeToString,
+                response_deserializer=nlp__pb2.EmotionResp.FromString,
+                )
 
 
 class NlpServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def Skill(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def Emotion(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -36,6 +47,11 @@ def add_NlpServiceServicer_to_server(servicer, server):
                     servicer.Skill,
                     request_deserializer=nlp__pb2.NlpSkillReq.FromString,
                     response_serializer=nlp__pb2.NlpSkillResp.SerializeToString,
+            ),
+            'Emotion': grpc.unary_unary_rpc_method_handler(
+                    servicer.Emotion,
+                    request_deserializer=nlp__pb2.EmotionReq.FromString,
+                    response_serializer=nlp__pb2.EmotionResp.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -61,5 +77,22 @@ class NlpService(object):
         return grpc.experimental.unary_unary(request, target, '/nlp.NlpService/Skill',
             nlp__pb2.NlpSkillReq.SerializeToString,
             nlp__pb2.NlpSkillResp.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def Emotion(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/nlp.NlpService/Emotion',
+            nlp__pb2.EmotionReq.SerializeToString,
+            nlp__pb2.EmotionResp.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

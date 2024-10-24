@@ -4,7 +4,6 @@
 # @Email : liuxh4@infore.com
 # @File : get_action_import_path.py
 from src.dm.actions.action import Action
-from src.dm.actions.sec_action import *
 
 if __name__ == '__main__':
     def get_subclasses(cls):

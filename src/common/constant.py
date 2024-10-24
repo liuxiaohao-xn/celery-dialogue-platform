@@ -31,6 +31,8 @@ class TermKey(Constant):
     SKILL = "skill"
     INTENT = "intent"
     EXT_ENTITIES = "ext_entities"
+    # CASH_EXT_ENTITIES = "cash_ext_entities"
+    # END_CASH_EXT_ENTITIES = "end_cash_ext_entities"
 
 
 class ComponentResKey(Constant):

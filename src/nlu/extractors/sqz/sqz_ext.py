@@ -8,11 +8,11 @@ from typing import Dict, Text, Any
 from src.common.message import SysMsg
 from src.common.component.component import Component
 from src.nlu.extractors.extractor import Extractor
-from src.nlu.extractors.sqz.entity_extract import Entity_Name_Time
+from src.nlu.extractors.sqz.entity_extract import ExtractEntity
 
 
-class EntityNameTime(Component, Extractor):
-    entity_name_time = Entity_Name_Time()
+class MeetingRoomExtractEntity(Component, Extractor):
+    extract_entity = ExtractEntity()
 
     @classmethod
     def get_default_config(cls) -> Dict[Text, Any]:
@@ -20,41 +20,15 @@ class EntityNameTime(Component, Extractor):
 
     @classmethod
     def make_o(cls, config: Dict[Text, Any]) -> Extractor:
-        extractor = EntityNameTime()
-        extractor.model = cls.entity_name_time
+        extractor = MeetingRoomExtractEntity()
+        extractor.model = cls.extract_entity
         return extractor
 
     def process(self, msg: SysMsg):
         # 实体提取
-        ext_entities = self.model.cut(msg.text)
+        ext_entities = self.model.extract(msg.text)
         return self.build_res(
             msg,
             ext_entities
         )
 
-
-class ZhNumExtractor(Component, Extractor):
-
-    @classmethod
-    def get_default_config(cls) -> Dict[Text, Any]:
-        return {
-            "num": re.compile(u'[一二两三四五六七八九十]{1,3}'),
-        }
-
-    @classmethod
-    def make_o(cls, config: Dict[Text, Any]) -> Extractor:
-        # todo 需要判断config.keys()是否都在配置的skills中
-        #   ...
-        zh_num_extractor = ZhNumExtractor()
-        zh_num_extractor.model = config
-        return zh_num_extractor
-
-    def process(self, msg: SysMsg) -> SysMsg:
-        """技能分类，执行完此函数，msg需要绑定skill_name属性"""
-        import cn2an
-        ext_infos = []
-        for num in self.model.get("num").findall(msg.text):
-            if num == "两":
-                num = "二"
-            ext_infos.append(("number", cn2an.cn2an(num), -1, -1))
-        return self.build_res(msg, ext_infos)

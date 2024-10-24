@@ -4,12 +4,12 @@
 # @Email : liuxh4@infore.com
 # @File : dialogue_flow.py
 from __future__ import annotations
-from typing import Text, List, Dict
+from typing import Text, List, Dict, Any
 from src.common.message import SysMsg
 from src.common.domain.domain import Slot, Flow, Entity
 from src.common.component.component_container import ComponentContainer
-from src.dm.actions.action import Action
 from src.dm.dialogue_manage.dialogue_entity_info import DialogueStateEntityInfo
+from src.dm.actions.action import Action
 
 
 class DialogueFlow:
@@ -41,7 +41,7 @@ class DialogueFlow:
         """流程结束标志, 如果流程结束, 关闭当前流程, 继续走下一个流程."""
         self.end = True
 
-    def activate(self, msg: SysMsg, dialogue_state_entity_info: DialogueStateEntityInfo) -> bool:
+    def activate(self, msg: SysMsg, dialogue_state_entity_info: Any) -> bool:
         """asr文本激活挂起流程
             激活: 则会执行该挂起流程 self.process(...)
             未激活: 不会执行挂起流程
@@ -95,10 +95,11 @@ def sync_msg(func):
         dialogue_flow: DialogueFlow = func(*args, **kwargs)
         msg: SysMsg = args[1]
         dialogue_state_entity_info: DialogueStateEntityInfo = args[2]
+        # todo 本质上exd_entities后续没用到
         msg.exd_entities = filter_not_related_entities(
             dialogue_state_entity_info.get_last_exd_entities(),
             dialogue_state_entity_info.cfg_slots
         )
-        msg.set_component_intent_res(dialogue_flow.intent)
+        msg.set_nlu_intent(dialogue_flow.intent)
         return dialogue_flow
     return wrapper

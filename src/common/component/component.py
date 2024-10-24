@@ -27,5 +27,4 @@ class Component(metaclass=ABCMeta):
 
     @abstractmethod
     def process(self, msg: SysMsg) -> SysMsg:
-        """组件执行"""
         ...

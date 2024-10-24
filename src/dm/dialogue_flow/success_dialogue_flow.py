@@ -32,7 +32,7 @@ class SuccessDialogueFlow(DialogueFlow):
 
     def action(self, msg: SysMsg) -> SysMsg:
 
-        flow = msg.parsed_domain.parsed_intents.get(self.intent).success_flow
+        flow = msg.parsed_domain.cfg_intents.get(self.intent).success_flow
         return self.get_action_eg(flow.action).run(
             msg,
             self.intent,
@@ -55,5 +55,7 @@ class SuccessDialogueFlow(DialogueFlow):
             self.verified_entities = dialogue_state_entity_info.verified_entities
             self.jump_over()
         self.close()
+        # todo 如果该结束对话需要被监控，新增一个结束挂起对话流，添加到结束对话管理池进行监控
+
         return self
 

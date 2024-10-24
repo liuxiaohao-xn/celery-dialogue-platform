@@ -49,9 +49,9 @@ class EntityFollowUpDialogueFlow(DialogueFlow):
             - 意图和历史意图相同，激活成功
             - 否则激活失败，切换意图
         """
-        exd_entities = msg.get_exd_entities()
+        exd_entities = msg.get_nlu_exd_entities()
         slot_follow_up_entity_info = dialogue_state_entity_info.slot_follow_up_entity_info
-        if not msg.get_pre_intent():
+        if not msg.get_nlu_intent():
             if self.exd_activate_info(exd_entities):
                 self.activate_type = ActivateType.ACTIVATE_SAME_INTENT
                 slot_follow_up_entity_info.append_follow_up_entities(
@@ -60,13 +60,13 @@ class EntityFollowUpDialogueFlow(DialogueFlow):
                 return True
             return False
         else:
-            if msg.get_pre_intent() == SystemIntent.POSITIVE:
+            if msg.get_nlu_intent() == SystemIntent.POSITIVE:
                 self.activate_type = ActivateType.ACTIVATE_YES
                 return True
-            elif msg.get_pre_intent() == SystemIntent.NEGATIVE:
+            elif msg.get_nlu_intent() == SystemIntent.NEGATIVE:
                 self.activate_type = ActivateType.ACTIVATE_NO
                 return True
-            elif msg.get_pre_intent() == self.intent:
+            elif msg.get_nlu_intent() == self.intent:
                 self.activate_type = ActivateType.ACTIVATE_SAME_INTENT
                 slot_follow_up_entity_info.append_follow_up_entities(
                     exd_entities

@@ -46,18 +46,18 @@ class EntityRepeatDialogueFlow(DialogueFlow):
             - 意图为select_num，激活成功
             - 否则激活失败，切换意图
         """
-        exd_entities = msg.get_exd_entities()
+        exd_entities = msg.get_nlu_exd_entities()
         repeat_verified_entity_info = dialogue_state_entity_info.repeat_verified_entity_info
-        if not msg.get_pre_intent():
+        if not msg.get_nlu_intent():
             if self.exd_activate_info(exd_entities):
                 self.activate_type = ActivateType.ACTIVATE_SAME_INTENT
                 return True
             return False
         else:
-            if msg.get_pre_intent() == self.intent:
+            if msg.get_nlu_intent() == self.intent:
                 self.activate_type = ActivateType.ACTIVATE_SAME_INTENT
                 return True
-            elif msg.get_pre_intent() == SystemIntent.SELECT:
+            elif msg.get_nlu_intent() == SystemIntent.SELECT:
                 self.activate_type = ActivateType.ACTIVATE_SELECT
                 repeat_verified_entity_info.select_num = exd_entities[0].value
                 return True
@@ -83,7 +83,7 @@ class EntityRepeatDialogueFlow(DialogueFlow):
         )
 
     def select_repeat_entity(self, msg: SysMsg) -> None or Entity:
-        for entity in msg.get_exd_entities():
+        for entity in msg.get_nlu_exd_entities():
             repeat_entity, values = self.repeat_verified_entity
             if entity.value in values:
                 repeat_entity.verify_value = entity.value

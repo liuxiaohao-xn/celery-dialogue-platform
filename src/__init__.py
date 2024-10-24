@@ -27,4 +27,3 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %I:%M:%S'
 )
 
-import src.nlu.utils.tier_recall_prefix

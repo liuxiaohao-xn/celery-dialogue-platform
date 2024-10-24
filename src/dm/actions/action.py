@@ -8,17 +8,9 @@ import random
 import logging
 from typing import Text, List, Dict, Tuple
 from src.common.message import SysMsg
-from src.common.domain.domain import Slot, Flow, Entity
+from src.common.domain.domain import Slot, Flow, Entity, Monitor
 
 logger = logging.getLogger(__name__)
-
-
-def confirm(func):
-    """业务意图确认"""
-    def wrapper(*args, **kwargs):
-        args[1].confirm = True
-        return func(*args, **kwargs)
-    return wrapper
 
 
 class Action(metaclass=ABCMeta):
@@ -30,6 +22,7 @@ class Action(metaclass=ABCMeta):
 
 
 class SuccessAction(Action):
+
     """任务成功action"""
     def get_related_entities(self, entities: List[Entity], slot: Slot) -> List[Entity]:
         return [entity for entity in entities if entity.en in slot.polymorphism]
@@ -37,6 +30,12 @@ class SuccessAction(Action):
     def run(self, msg: SysMsg, intent: Text, flow: Flow) -> SysMsg:
         msg.rsp = random.choice(flow.response)
         return msg
+
+
+class SuccessAndMonitorAction(Action):
+
+    def run(self, msg: SysMsg, monitor: Monitor) -> SysMsg:
+        ...
 
 
 class CancelAction(Action):
@@ -60,7 +59,7 @@ class SlotAction(Action):
 class SlotMissingAction(SlotAction):
 
     def run(self, msg: SysMsg, missing_slot: Slot, flow: Flow) -> SysMsg:
-        msg.rsp = random.choice(flow.response)
+        msg.sys_rsp.rsp = random.choice(flow.response)
         print(msg.rsp)
         return msg
 

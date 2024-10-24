@@ -35,8 +35,8 @@ class ComponentContainer:
                         raise Exception(f" 组件 {class_name} 冲突，已存在注册组件：{e_klass} ，"
                                         f" {klass} 注册失败.")
                     setattr(cls, class_name, klass)
-            except Exception:
-                raise Exception(f"组件检索失败.")
+            except Exception as e:
+                raise Exception(f"组件检索失败, {e}")
 
     @classmethod
     def get_register_klass(cls, klass_name: Text):

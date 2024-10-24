@@ -9,7 +9,7 @@ import src.grpc.nlp_pb2 as nlp_pb2
 from src.common.message import SysMsg
 from src.common.grpc.grpc_req import Base, Request, DeviceInfo, InteractInfo, grpcs
 from src.common.constant import YH_ROBOT_NLP_SUCCESS
-from src.common.utils import format_tts_text, format_skill_name, format_intent_name
+from src.common.utils import format_tts_text
 
 logger = logging.getLogger(__name__)
 
@@ -49,9 +49,7 @@ class RespContent(Base):
         self.tts_text: Text = None
         self.skill_id: Text = None
         self.intent_id: Text = None
-        self.session_end: bool = None
         self.confirm: bool = None
-        self.ask_aiui: bool = None
         self.slots: List[nlp_pb2.NlpSlot] = None
         """
         Args:
@@ -59,7 +57,7 @@ class RespContent(Base):
             tts_text: 系统回复文本，转tts使用
             skill_id: 命中的技能id，不是内部技能，是外部技能，如 秘书 为一个技能
             intent_id: 命中的意图id
-            confirm: 意图是否确认
+            confirm: 对话是否结束
             slots: 提取的槽位信息
         """
 
@@ -76,8 +74,7 @@ class Response(Base):
     ):
         self.req = req
         self.sys_msg = sys_msg
-        self.session_end = sys_msg.end
-        self.confirm = sys_msg.confirm
+        self.confirm = sys_msg.end
         self.code = code
         self.msg = msg
         self.device_info: DeviceInfo = self.req.device_info
@@ -93,9 +90,9 @@ class Response(Base):
     def get_ext_slots(self):
         """获取提取到的实体"""
         slots = []
-        for ext_entity in self.sys_msg.exd_entities:
+        for ext_entity in self.sys_msg.get_nlu_exd_entities():
             slot = Slot()
-            slot.slot = ext_entity.slot_name
+            slot.slot = self.sys_msg.get_slot_name_by_entity(ext_entity)  #ext_entity.slot_name # todo 设置槽位名字
             slot.value = str(ext_entity.value)
             slot.norma_value = str(ext_entity.verify_value)
             slot.optional = False if ext_entity.required else True
@@ -104,9 +101,9 @@ class Response(Base):
 
     def logging_exd_info(self, slots: List[Slot]):
         exd_info = {
-            "skill_name": self.sys_msg.get_pre_skill(),
+            "skill_name": self.sys_msg.get_nlu_skill(),
             "intent_id": self.content.intent_id,
-            "intent_name": self.sys_msg.get_pre_intent(),
+            "intent_name": self.sys_msg.get_nlu_intent(),
             "exd_slot": [
                 {
                     "name": slot.slot,
@@ -123,17 +120,10 @@ class Response(Base):
         self.content.asr_text = self.req.content.asr_text
         self.content.tts_text = self.sys_msg.rsp
         self.content.tts_text = format_tts_text(self.content.tts_text)
-        self.content.intent_id = self.sys_msg.get_pre_intent() if self.sys_msg.get_pre_intent() else ""
-        self.content.skill_id = self.sys_msg.parsed_domain.intent_map_skill.get(
-            self.content.intent_id
-        ) if self.content.intent_id else ""
-        self.content.intent_id, self.content.skill_id = format_intent_name(self.content.intent_id), \
-                                                        format_skill_name(self.content.skill_id)
-        self.content.session_end = self.session_end
+        # self.content.skill_id, self.content.intent_id = self.sys_msg.get_nlu_skill(), "1" # todo 待补充intent_id
         self.content.confirm = self.confirm
-        self.content.ask_aiui = self.sys_msg.ask_aiui
         slots = self.get_ext_slots()
-        self.logging_exd_info(slots)
+        # self.logging_exd_info(slots)
         return grpc_response(
             code=self.code,
             msg=self.msg,
@@ -142,11 +132,9 @@ class Response(Base):
             content=nlp_pb2.NlpRespContent(
                 asr_text=self.content.asr_text,
                 tts_text=self.content.tts_text,
-                skill_id=self.content.skill_id,
-                intent_id=self.content.intent_id,
-                session_end=self.content.session_end,
+                skill_id=self.sys_msg.get_nlu_skill(),
+                intent_id=self.sys_msg.get_nlu_intent(),
                 confirm=self.content.confirm,
-                ask_aiui=self.content.ask_aiui,
                 slots=slots,
             ),
             device_info=self.device_info.rev_transform(nlp_pb2.NlpDeviceInfo()),

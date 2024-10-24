@@ -4,30 +4,11 @@
 # @Email : liuxh4@infore.com
 # @File : domain.py
 from __future__ import annotations
-from dataclasses import dataclass
+from dataclasses import dataclass, Field
 from typing import Text, List, Any, Dict
+import logging
 
-
-# @dataclass
-# class Action:
-#     action: Text
-#     response: List[Text]
-#     """
-#     Args:
-#         action: 对话采取的Action
-#         response: 回复话术
-#     """
-#
-#     @classmethod
-#     def make_o(cls, **kwargs):
-#         try:
-#             return Action(**kwargs)
-#         except Exception:
-#             raise Exception(f"从{kwargs}创建Skill对象失败！")
-#
-#     @classmethod
-#     def required_attrs(cls):
-#         return ["action", "response"]
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -35,11 +16,7 @@ class Domain:
     """domain数据类"""
     en: Text
     zh: Text
-    """
-    Args:
-        en: en name
-        zh: zh name
-    """
+
     @classmethod
     def make_o(cls, **kwargs):
         """创建domain对象"""
@@ -55,10 +32,7 @@ class Skill(Domain):
     """技能数据类"""
     intents: List[Text]
     pipeline: List[Any]
-    """
-    Args:
-        intents: 技能下意图集合
-    """
+
     @classmethod
     def make_o(cls, **kwargs):
         try:
@@ -71,17 +45,16 @@ class Skill(Domain):
         return ["en", "zh", "intents", "pipeline"]
 
 
+
 @dataclass
 class Intent(Domain):
     """意图数据类"""
     success_flow: Flow
     slots: Dict[Text, Slot] = None
     cancel_flow: Flow = None
-    """
-    Args:
-        slots: 槽位集合
-        finish: 对话任务完成后系统采取的action
-    """
+    super: List[Text] = None
+    monitor: Monitor = None
+
     @classmethod
     def make_o(cls, **kwargs):
         try:
@@ -92,6 +65,28 @@ class Intent(Domain):
     @classmethod
     def required_attrs(cls):
         return ["en", "zh", "success_flow"]
+
+    def is_super_intent(self, intent: Text):
+        if not super:
+            raise Exception(f"{self.en}.super is None!")
+        return True if intent in self.super else False
+
+
+@dataclass
+class Monitor:
+    slot: Text
+    action: Text
+
+    @classmethod
+    def make_o(cls, **kwargs):
+        try:
+            return Monitor(**kwargs)
+        except Exception:
+            raise Exception(f"从{kwargs}创建Skill对象失败！")
+
+    @classmethod
+    def required_attrs(cls):
+        return ["slot", "action"]
 
 
 @dataclass
@@ -124,14 +119,6 @@ class Slot(Domain):
     # flow info
     flows: Dict[Text, Flow] = None
 
-    """
-    Args:
-        entity_cls: slot属于的实体类别
-        required: slot在intent下是否必需
-        missing: slot.required=True, slot缺失后系统采取的action
-        entities: slot槽位绑定的实体类别集合
-    """
-
     @classmethod
     def make_o(cls, **kwargs):
         try:
@@ -159,11 +146,6 @@ class Entity(Domain):
     slot_name: Text = None
     required: bool = None
 
-    """
-    Args:
-        csl: 实体类别，取值范围: ["dynamic", "static"]
-        source: 词条源
-    """
     @classmethod
     def make_o(cls, **kwargs):
         try:
@@ -189,6 +171,7 @@ class Entity(Domain):
 
     def __eq__(self, other: Entity):
         """切勿修改EXTEntity相等判断条件, 目前认为两个EXTEntity的实体名和值相等，就认为两者相等，暂不考虑位置信息."""
-        return self.en == other.en and (self.value == other.value or (self.value and self.verify_value and
-                                                                      self.verify_value == other.verify_value))
-
+        return self.en == other.en and (
+                self.value == other.value or (self.value and self.verify_value
+                                              and self.verify_value == other.verify_value)
+        )

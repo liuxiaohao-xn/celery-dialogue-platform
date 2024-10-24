@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\tnlp.proto\x12\x03nlp\"!\n\rNlpReqContent\x12\x10\n\x08\x61sr_text\x18\x01 \x01(\t\"7\n\rNlpDeviceInfo\x12\x11\n\tdevice_sn\x18\x01 \x01(\t\x12\x13\n\x0bmerchant_id\x18\x02 \x01(\t\"&\n\x0fNlpInteractInfo\x12\x13\n\x0binteract_id\x18\x01 \x01(\t\"\x1c\n\x0cNlpSkillInfo\x12\x0c\n\x04\x63ode\x18\x01 \x01(\t\"\xaf\x01\n\x0bNlpSkillReq\x12#\n\x07\x63ontent\x18\x01 \x01(\x0b\x32\x12.nlp.NlpReqContent\x12\'\n\x0b\x64\x65vice_info\x18\x02 \x01(\x0b\x32\x12.nlp.NlpDeviceInfo\x12+\n\rinteract_info\x18\x03 \x01(\x0b\x32\x14.nlp.NlpInteractInfo\x12%\n\nskill_list\x18\x04 \x03(\x0b\x32\x11.nlp.NlpSkillInfo\"\\\n\x07NlpSlot\x12\x0c\n\x04slot\x18\x01 \x01(\t\x12\x13\n\x0bnorma_value\x18\x02 \x01(\t\x12\r\n\x05value\x18\x03 \x01(\t\x12\x10\n\x08optional\x18\x04 \x01(\x08\x12\r\n\x05\x65xtra\x18\x05 \x01(\t\"\xae\x01\n\x0eNlpRespContent\x12\x10\n\x08\x61sr_text\x18\x01 \x01(\t\x12\x10\n\x08tts_text\x18\x02 \x01(\t\x12\x10\n\x08skill_id\x18\x03 \x01(\t\x12\x11\n\tintent_id\x18\x04 \x01(\t\x12\x13\n\x0bsession_end\x18\x05 \x01(\x08\x12\x0f\n\x07\x63onfirm\x18\x06 \x01(\x08\x12\x10\n\x08\x61sk_aiui\x18\x07 \x01(\x08\x12\x1b\n\x05slots\x18\x08 \x03(\x0b\x32\x0c.nlp.NlpSlot\"\xa5\x01\n\x0cNlpSkillResp\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\x12$\n\x07\x63ontent\x18\x03 \x01(\x0b\x32\x13.nlp.NlpRespContent\x12\'\n\x0b\x64\x65vice_info\x18\x04 \x01(\x0b\x32\x12.nlp.NlpDeviceInfo\x12+\n\rinteract_info\x18\x05 \x01(\x0b\x32\x14.nlp.NlpInteractInfo2<\n\nNlpService\x12.\n\x05Skill\x12\x10.nlp.NlpSkillReq\x1a\x11.nlp.NlpSkillResp\"\x00\x42\x08Z\x06./;nlpb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\tnlp.proto\x12\x03nlp\"2\n\rNlpReqContent\x12\x10\n\x08\x61sr_text\x18\x01 \x01(\t\x12\x0f\n\x07\x66\x65\x61ture\x18\x02 \x01(\t\"`\n\rNlpDeviceInfo\x12\x11\n\tdevice_sn\x18\x01 \x01(\t\x12\x13\n\x0bmerchant_id\x18\x02 \x01(\t\x12\x0b\n\x03lat\x18\x03 \x01(\t\x12\x0b\n\x03lng\x18\x04 \x01(\t\x12\r\n\x05scene\x18\x05 \x01(\t\"&\n\x0fNlpInteractInfo\x12\x13\n\x0binteract_id\x18\x01 \x01(\t\"\x1c\n\x0cNlpSkillInfo\x12\x0c\n\x04\x63ode\x18\x01 \x01(\t\"\xaf\x01\n\x0bNlpSkillReq\x12#\n\x07\x63ontent\x18\x01 \x01(\x0b\x32\x12.nlp.NlpReqContent\x12\'\n\x0b\x64\x65vice_info\x18\x02 \x01(\x0b\x32\x12.nlp.NlpDeviceInfo\x12+\n\rinteract_info\x18\x03 \x01(\x0b\x32\x14.nlp.NlpInteractInfo\x12%\n\nskill_list\x18\x04 \x03(\x0b\x32\x11.nlp.NlpSkillInfo\"\\\n\x07NlpSlot\x12\x0c\n\x04slot\x18\x01 \x01(\t\x12\x13\n\x0bnorma_value\x18\x02 \x01(\t\x12\r\n\x05value\x18\x03 \x01(\t\x12\x10\n\x08optional\x18\x04 \x01(\x08\x12\r\n\x05\x65xtra\x18\x05 \x01(\t\"\xbf\x01\n\x0eNlpRespContent\x12\x10\n\x08\x61sr_text\x18\x01 \x01(\t\x12\x10\n\x08tts_text\x18\x02 \x01(\t\x12\x10\n\x08skill_id\x18\x03 \x01(\t\x12\x11\n\tintent_id\x18\x04 \x01(\t\x12\x13\n\x0bsession_end\x18\x05 \x01(\x08\x12\x0f\n\x07\x63onfirm\x18\x06 \x01(\x08\x12\x10\n\x08\x61sk_aiui\x18\x07 \x01(\x08\x12\x1b\n\x05slots\x18\x08 \x03(\x0b\x32\x0c.nlp.NlpSlot\x12\x0f\n\x07\x66\x65\x61ture\x18\t \x01(\t\"\xd3\x01\n\x0cNlpSkillResp\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\x12$\n\x07\x63ontent\x18\x03 \x01(\x0b\x32\x13.nlp.NlpRespContent\x12\'\n\x0b\x64\x65vice_info\x18\x04 \x01(\x0b\x32\x12.nlp.NlpDeviceInfo\x12+\n\rinteract_info\x18\x05 \x01(\x0b\x32\x14.nlp.NlpInteractInfo\x12\x15\n\rtemplate_type\x18\x06 \x01(\t\x12\x15\n\rtemplate_data\x18\x07 \x01(\t\"-\n\nEmotionReq\x12\x0f\n\x07\x63ontent\x18\x01 \x01(\t\x12\x0e\n\x06userid\x18\x02 \x01(\t\"_\n\x0e\x45motionContent\x12\x0f\n\x07\x63ontent\x18\x01 \x01(\t\x12\x0e\n\x06userid\x18\x02 \x01(\t\x12\x14\n\x0csentiment_id\x18\x03 \x01(\t\x12\x16\n\x0esentiment_name\x18\x04 \x01(\t\"N\n\x0b\x45motionResp\x12\x0c\n\x04\x63ode\x18\x01 \x01(\x05\x12\x0b\n\x03msg\x18\x02 \x01(\t\x12$\n\x07\x63ontent\x18\x03 \x01(\x0b\x32\x13.nlp.EmotionContent2l\n\nNlpService\x12.\n\x05Skill\x12\x10.nlp.NlpSkillReq\x1a\x11.nlp.NlpSkillResp\"\x00\x12.\n\x07\x45motion\x12\x0f.nlp.EmotionReq\x1a\x10.nlp.EmotionResp\"\x00\x42\x08Z\x06./;nlpb\x06proto3')
 
 
 
@@ -26,6 +26,9 @@ _NLPSKILLREQ = DESCRIPTOR.message_types_by_name['NlpSkillReq']
 _NLPSLOT = DESCRIPTOR.message_types_by_name['NlpSlot']
 _NLPRESPCONTENT = DESCRIPTOR.message_types_by_name['NlpRespContent']
 _NLPSKILLRESP = DESCRIPTOR.message_types_by_name['NlpSkillResp']
+_EMOTIONREQ = DESCRIPTOR.message_types_by_name['EmotionReq']
+_EMOTIONCONTENT = DESCRIPTOR.message_types_by_name['EmotionContent']
+_EMOTIONRESP = DESCRIPTOR.message_types_by_name['EmotionResp']
 NlpReqContent = _reflection.GeneratedProtocolMessageType('NlpReqContent', (_message.Message,), {
   'DESCRIPTOR' : _NLPREQCONTENT,
   '__module__' : 'nlp_pb2'
@@ -82,27 +85,54 @@ NlpSkillResp = _reflection.GeneratedProtocolMessageType('NlpSkillResp', (_messag
   })
 _sym_db.RegisterMessage(NlpSkillResp)
 
+EmotionReq = _reflection.GeneratedProtocolMessageType('EmotionReq', (_message.Message,), {
+  'DESCRIPTOR' : _EMOTIONREQ,
+  '__module__' : 'nlp_pb2'
+  # @@protoc_insertion_point(class_scope:nlp.EmotionReq)
+  })
+_sym_db.RegisterMessage(EmotionReq)
+
+EmotionContent = _reflection.GeneratedProtocolMessageType('EmotionContent', (_message.Message,), {
+  'DESCRIPTOR' : _EMOTIONCONTENT,
+  '__module__' : 'nlp_pb2'
+  # @@protoc_insertion_point(class_scope:nlp.EmotionContent)
+  })
+_sym_db.RegisterMessage(EmotionContent)
+
+EmotionResp = _reflection.GeneratedProtocolMessageType('EmotionResp', (_message.Message,), {
+  'DESCRIPTOR' : _EMOTIONRESP,
+  '__module__' : 'nlp_pb2'
+  # @@protoc_insertion_point(class_scope:nlp.EmotionResp)
+  })
+_sym_db.RegisterMessage(EmotionResp)
+
 _NLPSERVICE = DESCRIPTOR.services_by_name['NlpService']
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'Z\006./;nlp'
   _NLPREQCONTENT._serialized_start=18
-  _NLPREQCONTENT._serialized_end=51
-  _NLPDEVICEINFO._serialized_start=53
-  _NLPDEVICEINFO._serialized_end=108
-  _NLPINTERACTINFO._serialized_start=110
-  _NLPINTERACTINFO._serialized_end=148
-  _NLPSKILLINFO._serialized_start=150
-  _NLPSKILLINFO._serialized_end=178
-  _NLPSKILLREQ._serialized_start=181
-  _NLPSKILLREQ._serialized_end=356
-  _NLPSLOT._serialized_start=358
-  _NLPSLOT._serialized_end=450
-  _NLPRESPCONTENT._serialized_start=453
-  _NLPRESPCONTENT._serialized_end=627
-  _NLPSKILLRESP._serialized_start=630
-  _NLPSKILLRESP._serialized_end=795
-  _NLPSERVICE._serialized_start=797
-  _NLPSERVICE._serialized_end=857
+  _NLPREQCONTENT._serialized_end=68
+  _NLPDEVICEINFO._serialized_start=70
+  _NLPDEVICEINFO._serialized_end=166
+  _NLPINTERACTINFO._serialized_start=168
+  _NLPINTERACTINFO._serialized_end=206
+  _NLPSKILLINFO._serialized_start=208
+  _NLPSKILLINFO._serialized_end=236
+  _NLPSKILLREQ._serialized_start=239
+  _NLPSKILLREQ._serialized_end=414
+  _NLPSLOT._serialized_start=416
+  _NLPSLOT._serialized_end=508
+  _NLPRESPCONTENT._serialized_start=511
+  _NLPRESPCONTENT._serialized_end=702
+  _NLPSKILLRESP._serialized_start=705
+  _NLPSKILLRESP._serialized_end=916
+  _EMOTIONREQ._serialized_start=918
+  _EMOTIONREQ._serialized_end=963
+  _EMOTIONCONTENT._serialized_start=965
+  _EMOTIONCONTENT._serialized_end=1060
+  _EMOTIONRESP._serialized_start=1062
+  _EMOTIONRESP._serialized_end=1140
+  _NLPSERVICE._serialized_start=1142
+  _NLPSERVICE._serialized_end=1250
 # @@protoc_insertion_point(module_scope)

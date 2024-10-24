@@ -5,32 +5,31 @@
 # @File : parser_domain.py
 import os.path
 from typing import Dict, Any, Text, List
-from src.common.domain.domain import Skill, Entity, Intent, Domain, Slot, Flow
+from src.common.domain.domain import Skill, Entity, Intent, Domain, Slot, Flow, Monitor
 from src.common.utils import read_yaml_file
+
+
+cur_path = os.path.abspath(__file__)
 
 
 class ParsedDomain:
     """解析domain.yml文件"""
 
     def __init__(self, domain_dir: Text) -> None:
-        self.skill_model = "SkillRecognize"
-        self.parsed_domain: Dict[Text, Skill] = self._parse_domain(
-            read_yaml_file(os.path.join(domain_dir, "domain.yml"))
-        )["sec_skill"]
-        self.intent_map_skill = self._intent_map_skill()
-        self.parsed_intents: Dict[Text, Intent] = self._parse_intents(
+        self.skill_model = "ZGSkillRecognize"
+        self.cfg_skills: Dict[Text, Skill] = self._parse_skills(
+            read_yaml_file(os.path.join(domain_dir, "skill.yml"))
+        )
+        self.cfg_intents: Dict[Text, Intent] = self._parse_intents(
             read_yaml_file(os.path.join(domain_dir, "intent.yml"))
         )
-        self.parsed_entities: Dict[Text, Entity] = self._parse_entities(
+        self.cfg_entities: Dict[Text, Entity] = self._parse_entities(
             read_yaml_file(os.path.join(domain_dir, "entity.yml"))
         )
-
-    def _intent_map_skill(self):
-        _intent_m_skill = {}
-        for skill, skill_obj in self.parsed_domain.items():
-            for intent in skill_obj.intents:
-                _intent_m_skill[intent] = skill
-        return _intent_m_skill
+        # sys
+        # self.cfg_sys_skills: Dict[Text, Skill] = self._parse_skills(
+        #     read_yaml_file(os.path.join(domain_dir, "sys_skill.yml"))
+        # )
 
     def _set_attrs_en_name(self, attrs: Dict[Text, Any], name: Text):
         """给domain设置en name"""
@@ -53,13 +52,13 @@ class ParsedDomain:
             setattr(domain, name, val)
         return domain
 
-    def _parse_domain(self, domain_col: Dict[Text, Any]) -> Dict[Text, Dict]:
-        """domain解析"""
-        domain_dic = {}
-        for domain_name, skills in domain_col.items():
-            parsed_skills = self._parse_skills(skills)
-            domain_dic[domain_name] = parsed_skills
-        return domain_dic
+    # def _parse_skill(self, domain_col: Dict[Text, Any]) -> Dict[Text, Dict]:
+    #     """domain解析"""
+    #     domain_dic = {}
+    #     for domain_name, skills in domain_col.items():
+    #         parsed_skills = self._parse_skills(skills)
+    #         domain_dic[domain_name] = parsed_skills
+    #     return domain_dic
 
     def _parse_skills(self, skill_col: Dict[Text, Any]) -> Dict[Text, Skill]:
         """从YML文件中解析技能"""
@@ -98,14 +97,14 @@ class ParsedDomain:
                 required_attrs_dic, not_required_attrs_dic = self._parse_domain_attrs(Intent.required_attrs(), attrs)
                 intent = Intent.make_o(**required_attrs_dic)
                 intent: Intent = self._bind_not_required_attrs(intent, not_required_attrs_dic)
-                if intent.slots:
-                    intent.slots = self._parse_intent_slots(intent.slots)
+                intent.slots = self._parse_intent_slots(intent.slots) if intent.slots else {}
+                intent.monitor = self._parse_monitor(intent.monitor) if intent.monitor else None
                 intent.success_flow = self._parse_flow("success_flow", intent.success_flow)
                 if intent.cancel_flow:
                     intent.cancel_flow = self._parse_flow("cancel_flow", intent.cancel_flow)
                 intent_dict[intent_name] = intent
             except Exception:
-                raise Exception(f"解析entity: {intent_name}失败")
+                raise Exception(f"解析intent: {intent_name}失败")
 
         return intent_dict
 
@@ -146,8 +145,15 @@ class ParsedDomain:
         except Exception:
             raise KeyError(f"未找到flow: {flow_name}，请先在YML文件中配置.")
 
+    def _parse_monitor(self, attrs: [List, Any]) -> Monitor:
+        try:
+            required_attrs_dic, not_required_attrs_dic = self._parse_domain_attrs(Monitor.required_attrs(), attrs)
+            monitor: Monitor = Monitor.make_o(**required_attrs_dic)
+            monitor = self._bind_not_required_attrs(monitor, not_required_attrs_dic)
+            return monitor
+        except Exception:
+            raise KeyError(f"未找到monitor，请先在YML文件中配置.")
+
 
 if __name__ == "__main__":
-    path = r"D:\job\git\yh-robot-nlp\resource"
-    parsed_domain = ParsedDomain(path)
-    print(parsed_domain)
+    ParsedDomain(r"D:\job\git\yh-domestic-service-robot\resource")

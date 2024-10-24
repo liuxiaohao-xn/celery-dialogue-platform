@@ -1,0 +1,51 @@
+[
+  {
+    "view_name": "default_view",
+    "view_id": 0,
+    "intents": [],
+    "entries": [],
+    "des": "默认视图"
+  },
+  {
+    "view_name": "take_photo_view",
+    "view_id": 1,
+    "intents": [],
+    "entries": [],
+    "des": "拍照视图"
+  },
+  {
+    "view_name": "take_video_view",
+    "view_id": 2,
+    "intents": [],
+    "entries": [],
+    "des": "拍摄视图"
+  },
+  {
+    "view_name": "photo_album_single_view",
+    "view_id": 3,
+    "intents": [],
+    "entries": [],
+    "des": "单照片浏览视图"
+  },
+  {
+    "view_name": "photo_album_multi_view",
+    "view_id": 4,
+    "intents": [],
+    "entries": [],
+    "des": "多照片浏览视图"
+  },
+  {
+    "view_name": "video_album_single_view",
+    "view_id": 5,
+    "intents": [],
+    "entries": [],
+    "des": "单视频浏览视图"
+  },
+  {
+    "view_name": "video_album_multi_view",
+    "view_id": 6,
+    "intents": [],
+    "entries": [],
+    "des": "多视频浏览视图"
+  }
+]

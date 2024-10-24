@@ -77,15 +77,15 @@ class EntityVerifyDialogueFlow(DialogueFlow):
             - 意图和历史意图相等，激活成功
             - 否则激活失败，切换意图
         """
-        exd_entities = msg.get_exd_entities()
+        exd_entities = msg.get_nlu_exd_entities()
         pending_verified_entity_info = dialogue_state_entity_info.pending_verified_entity_info
-        if not msg.get_pre_intent():
+        if not msg.get_nlu_intent():
             if self.exd_activate_info(exd_entities):
                 pending_verified_entity_info.append_not_verified_entities(exd_entities)
                 return True
             return False
         else:
-            if self.intent == msg.get_pre_intent():
+            if self.intent == msg.get_nlu_intent():
                 pending_verified_entity_info.append_not_verified_entities(exd_entities)
                 return True
             else:

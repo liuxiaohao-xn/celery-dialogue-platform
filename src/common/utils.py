@@ -4,11 +4,12 @@
 # @Email : liuxh4@infore.com
 # @File : utils.py
 import time
+import re
 from typing import Any, Dict, List, Optional, Text, Type, Union
-from src.common.grpc.grpc_req import Request
 from pathlib import Path
 from ruamel import yaml
 import os
+from src.common.grpc.grpc_req import Request
 
 
 def _is_ascii(text: Text) -> bool:
@@ -116,13 +117,24 @@ def format_tts_text(tts_text: Text, format_str=" ") -> Text:
     return tts_text.strip()
 
 
-def format_skill_name(skill_id: Text) -> Text:
-    return "YHS_" + skill_id.upper() if skill_id else skill_id
+def get_component_by_klass_name(klass_name: Text):
+    """get component instantiate by component klass name"""
+    from src.common.component.component_container import ComponentContainer
+    return klass_instantiate(
+        ComponentContainer.get_register_klass(
+            klass_name
+        )
+    )
 
 
-def format_intent_name(intent_id: Text) -> Text:
-    return "YHI_" + intent_id.upper() if intent_id else intent_id
+def klass_instantiate(klass):
+    """组件实例化"""
+    return klass.make_o(
+        klass.get_default_config()
+    )
 
+def rm_whitespace(content: Text):
+    return  re.sub(r"\s+", "", content)
 
 if __name__ == "__main__":
     t1 = get_cur_timestamp()
